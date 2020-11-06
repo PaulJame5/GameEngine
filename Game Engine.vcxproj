@@ -123,8 +123,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Gizmos\Vec2f.h" />
-    <ClInclude Include="Include\Gizmos\Vec2i.h" />
+    <ClInclude Include="Include\GameEngine.h" />
+    <ClInclude Include="Include\Gizmos\Vector2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
