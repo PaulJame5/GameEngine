@@ -8,6 +8,9 @@
 
 #ifndef __VECTOR2_H__
 #define __VECTOR2_H__
+
+#define PI 3.1415926535897932
+
 #include <cmath>
 #include <iostream>
 #include <string>
@@ -87,7 +90,7 @@ namespace ge
 		Vector2<T> rejection(Vector2<U>& other);
 
 		template <typename U>
-		Vector2<T> reflectVector(Vector2<U>& direction);
+		Vector2<double> reflectVector(Vector2<U>& direction);
 
 		template <typename U>
 		Vector2<T> lerpWith(Vector2<U>& other, double deltaTime);
@@ -106,7 +109,7 @@ namespace ge
 		double angleFromSelf(Vector2<U> target);
 
 		void normalise();
-		Vector2<T> normalized();
+		Vector2<double> normalized();
 		Vector2<T> unit();
 		// End functions to work with self
 		//==============================================================
@@ -271,9 +274,9 @@ namespace ge
 	//======================================================================
 	// Self Calculations
 	template<class T>
-	inline Vector2<T> Vector2<T>::normalized()
+	inline Vector2<double> Vector2<T>::normalized()
 	{
-		Vector2<T> v = Vector2<T>(x, y);
+		Vector2<double> v = Vector2<double>(x, y);
 		v.normalise();
 		return v;
 	}
@@ -288,7 +291,7 @@ namespace ge
 	template<class T>
 	inline double Vector2<T>::magnitude()
 	{
-		return std::sqrt(x * x + y * y);
+		return std::sqrt((x * x) + (y * y));
 	}
 
 	template<class T>
@@ -354,11 +357,11 @@ namespace ge
 
 	template<class T>
 	template <typename U>
-	inline Vector2<T> Vector2<T>::reflectVector(Vector2<U>& direction)
+	inline Vector2<double> Vector2<T>::reflectVector(Vector2<U>& direction)
 	{
-		Vector2<T> normal = direction.normalized();
+		Vector2<double> normal = direction.normalized();
 		double factor = 2.0f * normal.dot(direction);
-		return Vector2<T>(factor * normal.x + direction.x, factor * normal.y + direction.y);
+		return Vector2<double>(factor * normal.x + direction.x, factor * normal.y + direction.y);
 	}
 
 	template<class T>
@@ -393,18 +396,24 @@ namespace ge
 		return Vector2<T>(end.x - x, end.y - y);
 	}
 
+	///<summary>
+	/// Angle Retuurns in Degrees
+	///</summary>
 	template<class T>
 	template<typename U>
 	inline double Vector2<T>::vectorDirectionAsAngle(Vector2<U>& end)
 	{
-		return std::atan((double)end.x - x, (double)end.y - y);
+		return (std::atan2((double)end.y - y, (double)end.x - x) * 180 / PI);
 	}
 
+	///<summary>
+	/// Angle Retuurns in Degrees
+	///</summary>
 	template<class T>
 	template<typename U>
 	inline double Vector2<T>::angleFromSelf(Vector2<U> target)
 	{
-		return std::atan((double)target.x - x, (double)target.y - y);
+		return (std::atan2((double)target.y - y, (double)target.x - x) * 180 / PI);
 	}
 
 	template<class T>
@@ -414,10 +423,20 @@ namespace ge
 
 		if (m == 0)
 		{
-			this = zero();
+			x = 0;
+			y = 0;
 			return;
 		}
-		this /= m;
+		if (x == 0)
+		{
+			return;
+		}
+		if (y == 0)
+		{
+			return;
+		}
+		(x) /= m;
+		(y) /= m;
 	}
 	// End Self Calculations
 	//===========================================================
@@ -468,7 +487,7 @@ namespace ge
 	template<typename U, typename V>
 	inline double Vector2<T>::angleBetween(Vector2<U> from, Vector2<V> to)
 	{
-		return std::atan((double)to.x - from.x, (double)to.y - from.y);
+		return (std::atan2((double)to.y - from.y, (double)to.x - from.x) * 180 / PI);
 	}
 
 	template<class T>

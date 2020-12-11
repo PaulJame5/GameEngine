@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="Include\GameEngine.h" />
     <ClInclude Include="Include\Gizmos\Vector2.h" />
+    <ClInclude Include="RenderEngine\External Sources\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Source.cpp" />
