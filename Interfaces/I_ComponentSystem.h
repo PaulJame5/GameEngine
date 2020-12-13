@@ -37,6 +37,7 @@ public:
 	// Returns list of components type T attached to entity
 	static std::vector<T> getComponents(int entityId);
 
+	static int getRecycablePoolSize();
 
 	// Required to be implemented by the user
 	virtual void update() = 0;
@@ -179,4 +180,10 @@ inline std::vector<T> I_ComponentSystem<T>::getComponents(int entityId)
 
 	typename std::map<int, std::vector<T> >::iterator it = entities.find(entityId);
 	return it->second;
+}
+
+template<class T>
+inline int I_ComponentSystem<T>::getRecycablePoolSize()
+{
+	return recycablePool.size();
 }
