@@ -21,6 +21,9 @@ public:
 	// Generic Implementations
 	static void addComponent(int entityId);
 
+	// Adds a blank component of type T
+	static void addComponent(int entityId, T t);
+
 	// Removes component from entity and places it in a recyclable pool
 	static void removeComponent(int entityId);
 	static void removeComponents(int entityId);
@@ -32,12 +35,15 @@ public:
 	static bool hasComponent(int entityId);
 
 	// Returns first element null/blank if empty
-	static T getComponent(int entityId);
+	static T& getComponent(int entityId);
 
 	// Returns list of components type T attached to entity
-	static std::vector<T> getComponents(int entityId);
+	static std::vector<T>& getComponents(int entityId);
 
 	static int getRecycablePoolSize();
+
+	static std::map<int, std::vector<T>>& getEntities();
+	static std::queue<T>& getRecycalblePool();
 
 	// Required to be implemented by the user
 	virtual void update() = 0;
@@ -55,10 +61,10 @@ I_ComponentSystem<T>::~I_ComponentSystem() {}
 
 
 template<class T>
-std::map<int, std::vector<T>> I_ComponentSystem<T>::entities = { { } };
+std::map<int, std::vector<T>> I_ComponentSystem<T>::entities = { {} };
 
 template<class T>
-std::queue<T> I_ComponentSystem<T>::recycablePool = std::queue<T>();
+std::queue<T> I_ComponentSystem<T>::recycablePool = {};
 
 
 template<class T>
@@ -71,7 +77,14 @@ inline void I_ComponentSystem<T>::addComponent(int entityId)
 		return;
 	}
 	T newClassComponent;
+	//newClassComponent.init();
 	entities[entityId].push_back(newClassComponent);
+}
+
+template<class T>
+inline void I_ComponentSystem<T>::addComponent(int entityId, T newComponent)
+{
+	 entities[entityId].push_back(newComponent);
 }
 
 // Removes first component if there is more than 1
@@ -159,11 +172,11 @@ inline bool I_ComponentSystem<T>::hasComponent(int entityId)
 }
 
 template<class T>
-inline T I_ComponentSystem<T>::getComponent(int entityId)
+inline T& I_ComponentSystem<T>::getComponent(int entityId)
 {
 	if (!hasComponent(entityId))
 	{
-		return T;
+		addComponent(entityId);
 	}
 
 	typename std::map<int, std::vector<T> >::iterator it = entities.find(entityId);
@@ -171,11 +184,11 @@ inline T I_ComponentSystem<T>::getComponent(int entityId)
 }
 
 template<class T>
-inline std::vector<T> I_ComponentSystem<T>::getComponents(int entityId)
+inline std::vector<T>& I_ComponentSystem<T>::getComponents(int entityId)
 {
 	if (!hasComponent(entityId))
 	{
-		return std::vector<T>();
+		addComponent(entityId);
 	}
 
 	typename std::map<int, std::vector<T> >::iterator it = entities.find(entityId);
@@ -185,5 +198,17 @@ inline std::vector<T> I_ComponentSystem<T>::getComponents(int entityId)
 template<class T>
 inline int I_ComponentSystem<T>::getRecycablePoolSize()
 {
-	return recycablePool.size();
+	return getRecycalblePool().size();
+}
+
+template<class T>
+inline std::map<int, std::vector<T>>& I_ComponentSystem<T>::getEntities()
+{
+	return entities;
+}
+
+template<class T>
+inline std::queue<T>& I_ComponentSystem<T>::getRecycalblePool()
+{
+	return recycablePool;
 }

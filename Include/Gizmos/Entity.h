@@ -27,7 +27,7 @@ namespace ge
 		static void clearReusableIds();
 
 		template<class T>
-		inline void addComponent(T t);
+		inline void addComponent(T& t);
 		template<class T>
 		inline void removeComponent(T t);
 		template<class T>
@@ -42,12 +42,15 @@ namespace ge
 		int id;
 		std::string name;
 	};
+
+
+	// Adds a blank component of type T
 	template<class T>
-	inline void Entity::addComponent(T t)
+	inline void Entity::addComponent(T& t)
 	{
 		if (std::is_base_of<Component, T>())
 		{
-			I_ComponentSystem<T>::addComponent(id);
+			I_ComponentSystem<T>::addComponent(id, t);
 		}
 	}
 	template<class T>
