@@ -8,55 +8,36 @@
 #ifndef __RENDERINGSYSTEM_H__
 #define __RENDERINGSYSTEM_H__
 
-#include "../Components/RenderComponent.h"
+#include "SpriteSystem.h"
+#include "../Components/PhysicsComponent.h"
+#include "PhysicsSystem.h"
 #include <map>
 #include <vector>
-#include "../../Interfaces/I_ComponentSystem.h"
 #include <iostream>
+#include <chrono>
 
-class RenderingSystem : public I_ComponentSystem<RenderComponent>
+class RenderingSystem
 {
 public:
 	RenderingSystem();
-	~RenderingSystem() override;
+	~RenderingSystem();
 
+	void update(sf::RenderWindow& rend);
+
+private:
+
+//#if _DEBUG
+	void TestBeginTime();
+	void TestEndTime(); 
 	
-	void update() override;
+	std::chrono::milliseconds now;
 
+	void drawSprites(sf::RenderWindow* rend);
 
+	//to be implemented
+	//void drawGUI();
 
-	/*static void addComponent(int entityId);
-	static void removeComponent(int entityId);
-	static bool hasComponent(int entityId);
-	static RenderComponent getComponent(int entityId);
-	static void update();*/
+//#endif
 
 };
 #endif
-
-inline RenderingSystem::RenderingSystem()
-{
-
-}
-
-inline RenderingSystem::~RenderingSystem()
-{
-	entities.clear();
-}
-
-inline void RenderingSystem::update()
-{
-
-	std::map<int, std::vector<RenderComponent> >::iterator it = entities.begin();
-	
-	for (; it != entities.end(); ++it)
-	{
-		int size = it->second.size();
-		for (int i = 0; i < size; i++)
-		{
-			std::cout << "Drawing Entity With Id: " << it->first << ", Renderer Component: " << i << std::endl;
-		}
-	}
-}
-
-

@@ -29,7 +29,7 @@ ge::Entity::Entity(std::string name)
 
 ge::Entity::~Entity()
 {
-	reusableIds.push(id);
+	/*reusableIds.push(id);*/
 }
 int ge::Entity::getId()
 {
